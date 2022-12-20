@@ -25,7 +25,7 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.2" />
     <PackageReference Include="OAuth.DotNetCore" Version="3.0.1" />
-    <PackageReference Include="OsmSharp" Version="7.0.0-pre014" />
+    <PackageReference Include="OsmSharp" Version="7.0.0-pre018" />
   </ItemGroup>
 
 </Project>
