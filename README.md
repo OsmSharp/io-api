@@ -100,10 +100,3 @@ See the [functional tests](https://github.com/blackboxlogic/OsmApiClient/tree/ma
 
 ## Contribute
 Issues and pull requests are welcome.
-
-
-# OsmSharp.Service.API
-
-UNSUPPORTED EXPERIMENTAL IMPLEMENTATION FOR NOW!
-
-This repository contains a C# implementation of the editing functionality in the OSM-API using [NancyFX](https://github.com/NancyFX) and OsmSharp.
