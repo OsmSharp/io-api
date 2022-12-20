@@ -1,0 +1,23 @@
+name: Publish Package
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-test-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+    - name: Run Unit Test
+      run: dotnet test
+    - name: Build Solution
+      run: dotnet build --configuration Release
+    - name: Nuget Publish
+      if: success()
+      run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NugetApiKey}} ./OsmSharp.IO.API/bin/Release/*.nupkg
+    - name: Nuget Publish Symbols
+      if: success()
+      run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NugetApiKey}} ./OsmSharp.IO.API/bin/Release/*.snupkg
+
