@@ -4,8 +4,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>OsmSharp.IO.API</PackageId>
     <Version>0.0.9</Version>
-    <RepositoryUrl>https://github.com/OsmSharp/osm-api</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/OsmSharp/osm-api</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/OsmSharp/io-api</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/OsmSharp/io-api</PackageProjectUrl>
     <Description>This is a simple C# client to allow using the OSM API over REST.</Description>
     <PackageTags>osm;openstreetmap;client</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
