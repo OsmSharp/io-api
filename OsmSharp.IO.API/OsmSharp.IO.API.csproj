@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>OsmSharp.IO.API</PackageId>
-    <Version>1.0.3</Version>
-    <AssemblyVersion>1.0.3</AssemblyVersion>
-    <FileVersion>1.0.3</FileVersion>
+    <Version>1.0.4</Version>
+    <AssemblyVersion>1.0.4</AssemblyVersion>
+    <FileVersion>1.0.4</FileVersion>
     <RepositoryUrl>https://github.com/OsmSharp/io-api</RepositoryUrl>
     <PackageProjectUrl>https://github.com/OsmSharp/io-api</PackageProjectUrl>
-    <Icon>https://www.osmsharp.com/logos/osmsharp_logo64.png</Icon>
+    <IconUrl>https://www.osmsharp.com/logos/osmsharp_logo64.png</IconUrl>
     <Description>This is a simple C# client to allow using the OSM API over REST.</Description>
     <PackageTags>osm;openstreetmap;client</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
