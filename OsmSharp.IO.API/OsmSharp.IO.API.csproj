@@ -3,7 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>OsmSharp.IO.API</PackageId>
-    <Version>0.0.9</Version>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
+    <FileVersion>1.0.1</FileVersion>
     <RepositoryUrl>https://github.com/OsmSharp/io-api</RepositoryUrl>
     <PackageProjectUrl>https://github.com/OsmSharp/io-api</PackageProjectUrl>
     <Description>This is a simple C# client to allow using the OSM API over REST.</Description>
@@ -17,8 +19,7 @@
     <RepositoryType>git</RepositoryType>
     <RootNamespace>OsmSharp.IO.API</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    
   </PropertyGroup>
 
   <ItemGroup>
