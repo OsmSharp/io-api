@@ -12,7 +12,7 @@ namespace OsmSharp.IO.API
         /// <summary>
         /// The URL of the production instance of OSM's API. Use with care.
         /// </summary>
-        public const string PRODUCTION_URL = @"https://www.openstreetmap.org/api/";
+        public const string PRODUCTION_URL = @"https://api.openstreetmap.org/api/";
 
         /// <summary>
         /// The URL of the development instance of OSM's API. The correct place to do testing.
