@@ -17,7 +17,7 @@ Pull requests are welcome. You will need VisualStudio, VS Code or Rider to modif
 // Create a client factory (pointing at the dev server)
 var clientFactory = new ClientsFactory(null, new HttpClient(),
 	"https://master.apis.dev.openstreetmap.org/api/");
-// After testing, use "https://www.openstreetmap.org/api/" for production
+// After testing, use "https://api.openstreetmap.org/api/" for production
 ```
 
 ### Get a Node
