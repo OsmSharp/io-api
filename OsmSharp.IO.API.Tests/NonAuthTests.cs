@@ -213,7 +213,7 @@ namespace OsmSharp.IO.API.Tests
             const string doubleString = "-77.06719208";
 
             var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
-            var clientAsChild = client as NonAuthClient;
+            var clientAsChild = client as OsmClient;
 
             foreach (var culture in cultures)
             {

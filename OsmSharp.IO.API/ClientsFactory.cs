@@ -30,13 +30,13 @@ namespace OsmSharp.IO.API
         /// <inheritdoc/>
         public INonAuthClient CreateNonAuthClient()
         {
-            return new NonAuthClient(_baseAddress, _httpClient, _logger);
+            return new OsmClient(_baseAddress, _httpClient, null, _logger);
         }
 
         /// <inheritdoc/>
         public IAuthClient CreateOAuth2Client(string token)
         {
-            return new OAuth2Client(token, _baseAddress, _httpClient, _logger);
+            return new OsmClient(_baseAddress, _httpClient, token, _logger);
         }
     }
 }
