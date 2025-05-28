@@ -14,7 +14,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Web;
 using Microsoft.Extensions.Logging;
-using OsmSharp.Db;
 using System.Globalization;
 
 namespace OsmSharp.IO.API

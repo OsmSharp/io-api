@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 
 namespace OsmSharp.IO.API
 {
@@ -39,7 +36,7 @@ namespace OsmSharp.IO.API
         /// <inheritdoc/>
         public IAuthClient CreateOAuth2Client(string token)
         {
-            return new OAuth2Client(_httpClient, _logger, _baseAddress, token);
+            return new OAuth2Client(token, _baseAddress, _httpClient, _logger);
         }
     }
 }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using OsmSharp.API;
 using OsmSharp.Changesets;
 using OsmSharp.Complete;
-using OsmSharp.Db;
 
 namespace OsmSharp.IO.API
 {

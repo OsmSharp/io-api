@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OsmSharp.API;
 using OsmSharp.Changesets;
 using OsmSharp.Tags;
-using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
