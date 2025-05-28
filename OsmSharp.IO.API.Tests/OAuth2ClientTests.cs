@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OsmSharp.API;
 using OsmSharp.Changesets;
 using OsmSharp.Tags;
-using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -12,8 +11,7 @@ using System.Threading.Tasks;
 namespace OsmSharp.IO.API.Tests
 {
     [TestClass]
-    [Ignore("Should only be ran manually - comment-out for testing, do not check-in")]
-    public class BasicAuthClientTests
+    public class OAuth2ClientTests
     {
         private IAuthClient client;
 
@@ -26,7 +24,7 @@ namespace OsmSharp.IO.API.Tests
 
         private static readonly TagsCollection ChangeSetTags = new TagsCollection()
         {
-            new Tag("comment", "Running a functional test of an automated system."),
+            new Tag("comment", "Running a functional test of an automation tool."),
             new Tag("created_by", "https://github.com/OsmSharp/osm-api-client/"),
             new Tag("bot", "yes")
         };
@@ -37,13 +35,12 @@ namespace OsmSharp.IO.API.Tests
             using var loggerFactory = LoggerFactory.Create(b => b.AddConsole());
             var logger = loggerFactory.CreateLogger("Tests");
             IClientsFactory clientFactory = new ClientsFactory(logger, new HttpClient(), ClientsFactory.DEVELOPMENT_URL);
-            // Enter your user name and password here or OAuth credential below - do not check-in!
-            client = clientFactory.CreateBasicAuthClient("user-email", "password");
-            //client = clientFactory.CreateOAuthClient("customerkey", "customerSecret", "token", "tokenSecret");
-            //client = clientFactory.CreateOAuth2Client("token");
+            // Enter your OAuth2 credential below - do not check-in!
+            client = clientFactory.CreateOAuth2Client("oAuth-token");
         }
 
         [TestMethod]
+        [Ignore("Should only be ran manually - comment-out for testing, do not check-in")]
         public async Task TestChangesetLifeCycle()
         {
             var user = await client.GetUserDetails();
@@ -101,6 +98,7 @@ namespace OsmSharp.IO.API.Tests
         }
 
         [TestMethod]
+        [Ignore("Should only be ran manually - comment-out for testing, do not check-in")]
         public async Task TestPreferences()
         {
             var preferences = await client.GetUserPreferences();
@@ -122,6 +120,7 @@ namespace OsmSharp.IO.API.Tests
         }
 
         [TestMethod]
+        [Ignore("Should only be ran manually - comment-out for testing, do not check-in")]
         public async Task TestNotes()
         {
             var permissions = await client.GetPermissions();
@@ -162,6 +161,7 @@ namespace OsmSharp.IO.API.Tests
         }
 
         [TestMethod]
+        [Ignore("Should only be ran manually - comment-out for testing, do not check-in")]
         public async Task TestTraces()
         {
             using var gpxStream = File.Open("test.gpx", FileMode.Open);
@@ -171,6 +171,7 @@ namespace OsmSharp.IO.API.Tests
             NewGpx.Description += updatedText;
             await client.UpdateTrace(NewGpx);
             var myTraces = await client.GetTraces();
+            var originalLength = myTraces.Length;
             Assert.IsTrue(myTraces?.Length > 0);
             var gpxDetails = await client.GetTraceDetails(NewGpx.Id);
             Assert.IsNotNull(gpxDetails);
@@ -179,12 +180,9 @@ namespace OsmSharp.IO.API.Tests
             Assert.IsNotNull(gpxStreamBack.Stream);
             Assert.IsNotNull(gpxStreamBack.FileName);
             Assert.IsNotNull(gpxStreamBack.ContentType);
-            foreach (var trace in myTraces)
-            {
-                await client.DeleteTrace(trace.Id);
-            }
+            await client.DeleteTrace(NewGpx.Id);
             myTraces = await client.GetTraces();
-            Assert.AreEqual(0 ,myTraces?.Length);
+            Assert.AreEqual(originalLength - 1, myTraces?.Length);
         }
     }
 }

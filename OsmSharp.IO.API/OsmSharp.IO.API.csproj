@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>OsmSharp.IO.API</PackageId>
-    <Version>1.0.4</Version>
-    <AssemblyVersion>1.0.4</AssemblyVersion>
-    <FileVersion>1.0.4</FileVersion>
+    <Version>1.0.5</Version>
+    <AssemblyVersion>1.0.5</AssemblyVersion>
+    <FileVersion>1.0.5</FileVersion>
     <RepositoryUrl>https://github.com/OsmSharp/io-api</RepositoryUrl>
     <PackageProjectUrl>https://github.com/OsmSharp/io-api</PackageProjectUrl>
     <IconUrl>https://www.osmsharp.com/logos/osmsharp_logo64.png</IconUrl>
@@ -15,7 +15,7 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Copyright>Copyright 2023 Alex Hennings &amp; Harel Mazor</Copyright>
+    <Copyright>Copyright 2025 Alex Hennings &amp; Harel Mazor</Copyright>
     <Authors>Alex Hennings &amp; Harel Mazor</Authors>
     <RepositoryType>git</RepositoryType>
     <RootNamespace>OsmSharp.IO.API</RootNamespace>
@@ -24,14 +24,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\README.md" Pack="true" PackagePath=""/>
+    <None Include="..\README.md" Pack="true" PackagePath="" />
     
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.2" />
-    <PackageReference Include="OAuth.DotNetCore" Version="3.0.1" />
     <PackageReference Include="OsmSharp" Version="7.0.0-pre022" />
   </ItemGroup>
 
