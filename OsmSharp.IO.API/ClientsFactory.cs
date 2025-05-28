@@ -37,12 +37,6 @@ namespace OsmSharp.IO.API
         }
 
         /// <inheritdoc/>
-        public IAuthClient CreateBasicAuthClient(string username, string password)
-        {
-            return new BasicAuthClient(_httpClient, _logger, _baseAddress, username, password);
-        }
-
-        /// <inheritdoc/>
         public IAuthClient CreateOAuth2Client(string token)
         {
             return new OAuth2Client(_httpClient, _logger, _baseAddress, token);

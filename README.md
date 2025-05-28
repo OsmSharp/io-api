@@ -8,7 +8,7 @@ Pull requests are welcome. You will need VisualStudio, VS Code or Rider to modif
 
 ### Features
 - Supports Logging using ILogger
-- Supports Authentication with username and password, OAuth 1 and OAuth 2
+- Supports Authentication with OAuth 2
 - Supports every documented operation of the Osm Api v0.6
 - Is thread safe
 
@@ -26,9 +26,9 @@ var client = clientFactory.CreateNonAuthClient();
 var node = await client.GetNode(100);
 ```
 
-### Delete a Node (map changes require BasicAuth or OAuth)
+### Delete a Node (map changes require OAuth)
 ```c#
-var authClient = clientFactory.CreateBasicAuthClient("username", "password");
+var authClient = clientFactory.CreateOAuth2Client("oAuth-token");
 var changeSetTags = new TagsCollection() { new Tag("comment", "Deleting a node.") };
 var changeSetId = await client.CreateChangeset(changeSetTags);
 node.Version = await client.DeleteElement(changeSetId, node);

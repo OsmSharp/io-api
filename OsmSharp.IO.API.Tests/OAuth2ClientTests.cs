@@ -13,7 +13,7 @@ namespace OsmSharp.IO.API.Tests
 {
     [TestClass]
     [Ignore("Should only be ran manually - comment-out for testing, do not check-in")]
-    public class BasicAuthClientTests
+    public class OAuth2ClientTests
     {
         private IAuthClient client;
 
@@ -26,7 +26,7 @@ namespace OsmSharp.IO.API.Tests
 
         private static readonly TagsCollection ChangeSetTags = new TagsCollection()
         {
-            new Tag("comment", "Running a functional test of an automated system."),
+            new Tag("comment", "Running a functional test of an automation tool."),
             new Tag("created_by", "https://github.com/OsmSharp/osm-api-client/"),
             new Tag("bot", "yes")
         };
@@ -37,10 +37,8 @@ namespace OsmSharp.IO.API.Tests
             using var loggerFactory = LoggerFactory.Create(b => b.AddConsole());
             var logger = loggerFactory.CreateLogger("Tests");
             IClientsFactory clientFactory = new ClientsFactory(logger, new HttpClient(), ClientsFactory.DEVELOPMENT_URL);
-            // Enter your user name and password here or OAuth credential below - do not check-in!
-            client = clientFactory.CreateBasicAuthClient("user-email", "password");
-            //client = clientFactory.CreateOAuthClient("customerkey", "customerSecret", "token", "tokenSecret");
-            //client = clientFactory.CreateOAuth2Client("token");
+            // Enter your OAuth2 credential below - do not check-in!
+            client = clientFactory.CreateOAuth2Client("oAuth-token");
         }
 
         [TestMethod]

@@ -11,13 +11,6 @@
         /// </summary>
         /// <returns></returns>
         INonAuthClient CreateNonAuthClient();
-        /// <summary>
-        /// Creates a client that needs user name and password credentials
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        IAuthClient CreateBasicAuthClient(string username, string password);
 
         /// <summary>
         /// Creates a client that will use OAuth 2.0 credentials provided from the OAuth OSM page
