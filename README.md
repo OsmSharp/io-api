@@ -1,6 +1,6 @@
 # OsmSharp.IO.API
 
-[![NuGet Badge](https://buildstats.info/nuget/OsmSharp.IO.API)](https://www.nuget.org/packages/OsmSharp.IO.API)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/OsmSharp.IO.API.svg)](https://www.nuget.org/packages/OsmSharp.IO.API/)
 
 This is a simple C# client to allow using [OSM API](https://wiki.openstreetmap.org/wiki/API_v0.6) easily over REST.
 Please read the API's documentation and use it responsibly. Misuse can have an adverse affect on the OSM ecosystem.
@@ -9,7 +9,7 @@ Pull requests are welcome. You will need VisualStudio, VS Code or Rider to modif
 ### Features
 - Supports Logging using ILogger
 - Supports Authentication with OAuth 2
-- Supports every documented operation of the Osm Api v0.6
+- Supports every documented operation of the Osm Api v0.6 (May be missing features after 2022, see [docs](https://www.nuget.org/packages/OsmSharp.IO.API/))
 - Is thread safe
 
 ## Example Usage
