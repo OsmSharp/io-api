@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using OsmSharp.API;
 using OsmSharp.Streams;
@@ -112,7 +113,8 @@ namespace OsmSharp.IO.API
             var stream = await content.ReadAsStreamAsync();
             var streamSource = new XmlOsmStreamSource(stream);
             var completeSource = new OsmSimpleCompleteStreamSource(streamSource);
-            var element = completeSource.OfType<TCompleteOsmGeo>().FirstOrDefault();
+            // The response may contain other elements of the same type (e.g. child relations), so match by id.
+            var element = completeSource.OfType<TCompleteOsmGeo>().FirstOrDefault(e => e.Id == id);
             return element;
         }
 
@@ -710,7 +712,7 @@ namespace OsmSharp.IO.API
             using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, address))
             {
                 auth?.Invoke(request);
-                var response = await _httpClient.SendAsync(request);
+                var response = await _httpClient.SendAsync(request, CancellationToken.None);
                 await VerifyAndLogResponse(response, $"{GetType().Name} GET: {address}");
                 return response.Content;
             }
@@ -740,7 +742,7 @@ namespace OsmSharp.IO.API
             {
                 AddAuthentication(request, address, method.ToString());
                 request.Content = requestContent;
-                var response = await _httpClient.SendAsync(request);
+                var response = await _httpClient.SendAsync(request, CancellationToken.None);
                 await VerifyAndLogResponse(response, $"{GetType().Name} {method}: {address}");
                 return response.Content;
             }

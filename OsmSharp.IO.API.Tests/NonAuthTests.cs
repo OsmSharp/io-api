@@ -1,10 +1,12 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OsmSharp.API;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -123,6 +125,36 @@ namespace OsmSharp.IO.API.Tests
             Assert.IsNotNull(relation);
             var relationComplete = client.GetCompleteRelation(relationId).Result;
             Assert.IsNotNull(relationComplete);
+        }
+
+        [TestMethod]
+        public async Task TestCompleteRelationWithChildRelations_ShouldReturnTheCorrectId()
+        {
+            // Based on relation 19598237 in production, whose full response lists its child relations before the relation itself.
+            const long relationId = 19598237;
+            var fullResponse = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+<osm version=""0.6"">
+ <relation id=""3153810"" visible=""true"" version=""56"">
+  <member type=""way"" ref=""673583686"" role=""""/>
+  <tag k=""type"" v=""route""/>
+ </relation>
+ <relation id=""3153811"" visible=""true"" version=""40"">
+  <member type=""way"" ref=""301041579"" role=""""/>
+  <tag k=""type"" v=""route""/>
+ </relation>
+ <relation id=""{relationId}"" visible=""true"" version=""32"">
+  <member type=""relation"" ref=""3153810"" role=""""/>
+  <member type=""relation"" ref=""3153811"" role=""""/>
+  <tag k=""type"" v=""superroute""/>
+ </relation>
+</osm>";
+            var httpClient = Substitute.ForPartsOf<HttpClient>();
+            httpClient.SendAsync(Arg.Is<HttpRequestMessage>(r => r.RequestUri.ToString() == $"{ClientsFactory.DEVELOPMENT_URL}0.6/relation/{relationId}/full"), Arg.Any<CancellationToken>())
+                .Returns(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(fullResponse) });
+            var client = new ClientsFactory(null, httpClient, ClientsFactory.DEVELOPMENT_URL).CreateNonAuthClient();
+            var relationComplete = await client.GetCompleteRelation(relationId);
+            Assert.IsNotNull(relationComplete);
+            Assert.AreEqual(relationId, relationComplete.Id);
         }
 
         [TestMethod]
