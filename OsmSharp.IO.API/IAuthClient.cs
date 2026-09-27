@@ -39,16 +39,16 @@ namespace OsmSharp.IO.API
         Task<Changeset> AddChangesetComment(long changesetId, string text);
         /// <summary>
         /// Subscribes the current User to a Changeset
-        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Subscribe:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Fsubscribe">
-        /// POST /api/0.6/changeset/#id/subscribe </see>
+        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Subscribe:_POST_/api/0.6/changeset/#id/subscription">
+        /// POST /api/0.6/changeset/#id/subscription</see>
         /// </summary>
         /// <param name="changesetId">The changeset ID</param>
         /// <returns></returns>
         Task ChangesetSubscribe(long changesetId);
         /// <summary>
         /// Unsubscribe the current User from a Changeset
-        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Subscribe:_POST_.2Fapi.2F0.6.2Fchangeset.2F.23id.2Funsubscribe">
-        /// POST /api/0.6/changeset/#id/unsubscribe </see>
+        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Unsubscribe:_DELETE_/api/0.6/changeset/#id/subscription">
+        /// DELETE /api/0.6/changeset/#id/subscription</see>
         /// </summary>
         /// <param name="changesetId"></param>
         /// <returns></returns>
@@ -99,9 +99,23 @@ namespace OsmSharp.IO.API
         /// <returns>The updated Note, including the new Comment</returns>
         Task<Note> ReOpenNote(long noteId, string text);
         /// <summary>
+        /// Subscribes to the discussion of a Note
+        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Subscribe:_POST_/api/0.6/notes/#id/subscription">
+        /// POST /api/0.6/notes/#id/subscription</see>
+        /// </summary>
+        /// <param name="noteId">The ID of the Note.</param>
+        Task NoteSubscribe(long noteId);
+        /// <summary>
+        /// Unsubscribes from the discussion of a Note
+        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Unsubscribe:_DELETE_/api/0.6/notes/#id/subscription">
+        /// DELETE /api/0.6/notes/#id/subscription</see>
+        /// </summary>
+        /// <param name="noteId">The ID of the Note.</param>
+        Task NoteUnsubscribe(long noteId);
+        /// <summary>
         /// Adds a new Element's creation to a Changeset
-        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_PUT_.2Fapi.2F0.6.2F.5Bnode.7Cway.7Crelation.5D.2Fcreate">
-        /// PUT /api/0.6/[node|way|relation]/create</see>
+        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_POST_/api/0.6/[nodes|ways|relations]">
+        /// POST /api/0.6/[nodes|ways|relations]</see>
         /// </summary>
         /// <param name="changesetId">The ID of an OPEN Changeset.</param>
         /// <returns>The ID of the new Element</returns>
@@ -141,9 +155,9 @@ namespace OsmSharp.IO.API
         Task<GpxFile[]> GetTraces();
         /// <summary>
         /// Creates a new GPX Trace File
-        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_POST_.2Fapi.2F0.6.2Fgpx.2Fcreate">
-        /// POST /api/0.6/gpx/create</see>
-        /// </summary>s
+        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Create:_POST_/api/0.6/gpx">
+        /// POST /api/0.6/gpx</see>
+        /// </summary>
         /// <param name="gpx"></param>
         /// <param name="fileStream"></param>
         /// <returns>The GPX Trace File's ID</returns>
@@ -212,5 +226,12 @@ namespace OsmSharp.IO.API
         /// <param name="preferences">Must not contain more than 150 elements.
         /// Keys and values must not exceed 255 characters.</param>
         Task SetUserPreferences(Preferences preferences);
+        /// <summary>
+        /// Gets the active blocks of the current User, works even when the User is blocked
+        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#List_active_blocks:_GET_/api/0.6/user/blocks/active">
+        /// GET /api/0.6/user/blocks/active</see>
+        /// </summary>
+        /// <returns>The active blocks, empty if there are none</returns>
+        Task<UserBlock[]> GetActiveUserBlocks();
     }
 }

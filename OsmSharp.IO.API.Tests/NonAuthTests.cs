@@ -205,6 +205,29 @@ namespace OsmSharp.IO.API.Tests
         }
 
         [TestMethod]
+        public async Task TestSearchChangesetComments()
+        {
+            var comments = await client.SearchChangesetComments(limit: 2);
+            Assert.AreEqual(2, comments.Length);
+            var comment = comments.First();
+            Assert.IsTrue(comment.Id > 0);
+            Assert.IsNotNull(comment.UserName);
+            var userComments = await client.SearchChangesetComments(userId: comment.UserId, limit: 5);
+            Assert.IsTrue(userComments.Any());
+            Assert.IsTrue(userComments.All(c => c.UserId == comment.UserId));
+        }
+
+        [TestMethod]
+        public async Task TestGetUserBlock()
+        {
+            var block = await client.GetUserBlock(1);
+            Assert.AreEqual(1, block.Id);
+            Assert.IsNotNull(block.User?.Name);
+            Assert.IsNotNull(block.Creator?.Name);
+            Assert.IsNotNull(block.Reason);
+        }
+
+        [TestMethod]
         public async Task TestTrack()
         {
             var gpx = await client.GetTrackPoints(TraceArea);

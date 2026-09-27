@@ -19,7 +19,7 @@ namespace OsmSharp.IO.API.Tests
         {
             Name = "test.gpx",
             Description = "A file for testing upload functionality.",
-            Visibility = Visibility.Public,
+            Visibility = Visibility.Identifiable,
         };
 
         private static readonly TagsCollection ChangeSetTags = new TagsCollection()
@@ -70,6 +70,9 @@ namespace OsmSharp.IO.API.Tests
             Assert.AreEqual(2, newNode.Version);
             newNode.Version = await client.DeleteElement(changesetId, newNode);
             Assert.AreEqual(3, newNode.Version);
+            newRelation.Version = 1;
+            newRelation.Version = await client.DeleteElement(changesetId, newRelation);
+            Assert.AreEqual(2, newRelation.Version);
             await client.CloseChangeset(changesetId);
             var download = await client.GetChangesetDownload(changesetId);
             var changeset = await client.GetChangeset(changesetId);
@@ -79,16 +82,16 @@ namespace OsmSharp.IO.API.Tests
             Assert.IsNotNull(download?.Delete);
             Assert.IsNotNull(changeset);
             Assert.AreEqual(0, changeset.CommentsCount);
-            Assert.AreEqual(5, changeset.ChangesCount);
+            Assert.AreEqual(6, changeset.ChangesCount);
             var comment = "This is a comment on the changeset";
             var changesetFromComment = await client.AddChangesetComment(changesetId, comment);
             Assert.IsNotNull(changesetFromComment);
             Assert.AreEqual(1, changesetFromComment.CommentsCount);
-            Assert.AreEqual(5, changesetFromComment.ChangesCount);
+            Assert.AreEqual(6, changesetFromComment.ChangesCount);
             var changesetWithComment = await client.GetChangeset(changesetId, true);
             Assert.IsNotNull(changesetWithComment);
             Assert.AreEqual(1, changesetWithComment.CommentsCount);
-            Assert.AreEqual(5, changesetWithComment.ChangesCount);
+            Assert.AreEqual(6, changesetWithComment.ChangesCount);
             Assert.AreEqual(1, changesetWithComment.Discussion.Comments.Length);
             Assert.AreEqual(comment, changesetWithComment.Discussion.Comments[0].Text);
             // These throw their own exceptions if they fail.
@@ -133,6 +136,9 @@ namespace OsmSharp.IO.API.Tests
                 Assert.AreEqual(Note.Comment.CommentAction.Opened, note?.Comments?.Comments?.FirstOrDefault()?.Action);
                 Assert.AreEqual(Note.NoteStatus.Open, note?.Status);
                 Assert.IsNotNull(note?.Comments?.Comments?.FirstOrDefault()?.UserId);
+                // The creator is subscribed automatically, so unsubscribe first to end in the same state.
+                await client.NoteUnsubscribe(note.Id.Value);
+                await client.NoteSubscribe(note.Id.Value);
                 noteText = "second";
                 note = await client.CommentNote(note.Id.Value, noteText);
                 Assert.AreEqual(noteText, note?.Comments?.Comments?.LastOrDefault()?.Text);
@@ -157,7 +163,18 @@ namespace OsmSharp.IO.API.Tests
                 Assert.AreEqual(Note.Comment.CommentAction.Commented, note?.Comments?.Comments?.LastOrDefault()?.Action);
                 Assert.IsNotNull(note?.Comments?.Comments?.FirstOrDefault()?.UserId);
                 Assert.AreEqual(Note.NoteStatus.Open, note?.Status);
+                note = await client.CloseNote(note.Id.Value, "closing the test note");
+                Assert.AreEqual(Note.NoteStatus.Closed, note?.Status);
             }
+        }
+
+        [TestMethod]
+        [Ignore("Should only be ran manually - comment-out for testing, do not check-in")]
+        public async Task TestGetActiveUserBlocks()
+        {
+            var blocks = await client.GetActiveUserBlocks();
+            Assert.IsNotNull(blocks);
+            Assert.AreEqual(0, blocks.Length);
         }
 
         [TestMethod]

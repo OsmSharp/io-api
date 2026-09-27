@@ -435,10 +435,10 @@ namespace OsmSharp.IO.API
         /// <inheritdoc />
         public async Task<long> CreateElement(long changesetId, OsmGeo osmGeo)
         {
-            var address = _baseAddress + $"0.6/{osmGeo.Type.ToString().ToLower()}/create";
+            var address = _baseAddress + $"0.6/{osmGeo.Type.ToString().ToLower()}s";
             var osmRequest = GetOsmRequest(changesetId, osmGeo);
             var content = new StringContent(osmRequest.SerializeToXml());
-            var response = await SendAuthRequest(HttpMethod.Put, address, content);
+            var response = await SendAuthRequest(HttpMethod.Post, address, content);
             var id = await response.ReadAsStringAsync();
             return long.Parse(id);
         }
@@ -502,15 +502,36 @@ namespace OsmSharp.IO.API
         /// <inheritdoc />
         public async Task ChangesetSubscribe(long changesetId)
         {
-            var address = _baseAddress + $"0.6/changeset/{changesetId}/subscribe";
+            var address = _baseAddress + $"0.6/changeset/{changesetId}/subscription";
             await SendAuthRequest(HttpMethod.Post, address, new StringContent(""));
         }
 
         /// <inheritdoc />
         public async Task ChangesetUnsubscribe(long changesetId)
         {
-            var address = _baseAddress + $"0.6/changeset/{changesetId}/unsubscribe";
-            await SendAuthRequest(HttpMethod.Post, address, new StringContent(""));
+            var address = _baseAddress + $"0.6/changeset/{changesetId}/subscription";
+            await SendAuthRequest(HttpMethod.Delete, address, null);
+        }
+
+        /// <inheritdoc />
+        public async Task<ChangesetComment[]> SearchChangesetComments(long? userId = null, string userName = null,
+            DateTime? fromDate = null, DateTime? toDate = null, int? limit = null)
+        {
+            if (userId.HasValue && userName != null)
+                throw new ArgumentException("Query can only specify userID OR userName, not both.");
+            if (!fromDate.HasValue && toDate.HasValue)
+                throw new ArgumentException("Query must specify fromDate if toDate is specified.");
+
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            if (userId.HasValue) query["user"] = userId.ToString();
+            if (userName != null) query["display_name"] = userName;
+            if (fromDate.HasValue) query["from"] = FormatNoteDate(fromDate.Value);
+            if (toDate.HasValue) query["to"] = FormatNoteDate(toDate.Value);
+            if (limit.HasValue) query["limit"] = limit.ToString();
+
+            var address = _baseAddress + "0.6/changeset_comments?" + query;
+            var content = await Get(address);
+            return await Deserialize<ChangesetComment[]>(content, ChangesetCommentsSerializer);
         }
         #endregion
         
@@ -527,7 +548,7 @@ namespace OsmSharp.IO.API
         /// <inheritdoc />
         public async Task<GpxFile> GetTraceDetails(long id)
         {
-            var address = _baseAddress + $"0.6/gpx/{id}/details";
+            var address = _baseAddress + $"0.6/gpx/{id}";
             var osm = await Get<Osm>(address, c => AddAuthentication(c, address));
             return osm.GpxFiles[0];
         }
@@ -551,7 +572,7 @@ namespace OsmSharp.IO.API
         /// <inheritdoc />
         public async Task<long> CreateTrace(GpxFile gpx, Stream fileStream)
         {
-            var address = _baseAddress + "0.6/gpx/create";
+            var address = _baseAddress + "0.6/gpx";
             var form = new MultipartFormDataContent();
             form.Add(new StringContent(gpx.Description), "\"description\"");
             form.Add(new StringContent(gpx.Visibility.ToString().ToLower()), "\"visibility\"");
@@ -685,6 +706,20 @@ namespace OsmSharp.IO.API
             var osm = await Post<Osm>(address);
             return osm.Notes[0];
         }
+
+        /// <inheritdoc />
+        public async Task NoteSubscribe(long noteId)
+        {
+            var address = _baseAddress + $"0.6/notes/{noteId}/subscription";
+            await SendAuthRequest(HttpMethod.Post, address, null);
+        }
+
+        /// <inheritdoc />
+        public async Task NoteUnsubscribe(long noteId)
+        {
+            var address = _baseAddress + $"0.6/notes/{noteId}/subscription";
+            await SendAuthRequest(HttpMethod.Delete, address, null);
+        }
         #endregion
 
         #region Http
@@ -734,6 +769,16 @@ namespace OsmSharp.IO.API
             var serializer = new XmlSerializer(typeof(T));
             var element = serializer.Deserialize(stream) as T;
             return element;
+        }
+
+        // Serializers with a root override must be cached, otherwise a new assembly is generated for every instance.
+        private static readonly XmlSerializer ChangesetCommentsSerializer = new XmlSerializer(typeof(ChangesetComment[]), new XmlRootAttribute("osm"));
+        private static readonly XmlSerializer UserBlocksSerializer = new XmlSerializer(typeof(UserBlock[]), new XmlRootAttribute("osm"));
+
+        private static async Task<T> Deserialize<T>(HttpContent content, XmlSerializer serializer) where T : class
+        {
+            var stream = await content.ReadAsStreamAsync();
+            return serializer.Deserialize(stream) as T;
         }
 
         private async Task<HttpContent> SendAuthRequest(HttpMethod method, string address, HttpContent requestContent)
@@ -843,6 +888,23 @@ namespace OsmSharp.IO.API
         {
             var address = _baseAddress + $"0.6/user/preferences/{Encode(key)}";
             await SendAuthRequest(HttpMethod.Delete, address, null);
+        }
+
+        /// <inheritdoc />
+        public async Task<UserBlock> GetUserBlock(long id)
+        {
+            var address = _baseAddress + $"0.6/user_blocks/{id}";
+            var content = await Get(address);
+            var blocks = await Deserialize<UserBlock[]>(content, UserBlocksSerializer);
+            return blocks.FirstOrDefault();
+        }
+
+        /// <inheritdoc />
+        public async Task<UserBlock[]> GetActiveUserBlocks()
+        {
+            var address = _baseAddress + "0.6/user/blocks/active";
+            var content = await Get(address, c => AddAuthentication(c, address));
+            return await Deserialize<UserBlock[]>(content, UserBlocksSerializer);
         }
         #endregion
         

@@ -31,6 +31,12 @@ namespace OsmSharp.IO.API
         Task<User> GetUser(long id);
         Task<User[]> GetUsers(params long[] ids);
         /// <summary>
+        /// Gets a user block
+        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Read:_GET_/api/0.6/user_blocks/#id">
+        /// GET /api/0.6/user_blocks/#id</see>.
+        /// </summary>
+        Task<UserBlock> GetUserBlock(long id);
+        /// <summary>
         /// Gets a Way, including the details of each Node in it
         /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Full:_GET_.2Fapi.2F0.6.2F.5Bway.7Crelation.5D.2F.23id.2Ffull">
         /// GET /api/0.6/way/#id/full</see>.
@@ -182,6 +188,17 @@ namespace OsmSharp.IO.API
         /// </summary>
         Task<OsmChange> GetChangesetDownload(long changesetId);
         /// <summary>
+        /// Search changeset comments, the most recent comments are returned if no parameter is specified.
+        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Search_changeset_comments:_GET_/api/0.6/changeset_comments">
+        /// GET /api/0.6/changeset_comments</see>
+        /// </summary>
+        /// <param name="userId">Specifies the author of the returned comments by the id of the user. Does not work together with userName</param>
+        /// <param name="userName">Specifies the author of the returned comments by the display name. Does not work together with userId</param>
+        /// <param name="fromDate">Specifies the beginning of a date range to search in for comments</param>
+        /// <param name="toDate">Specifies the end of a date range to search in for comments, requires fromDate</param>
+        /// <param name="limit">The maximum number of comments to return, the server default is used if null.</param>
+        Task<ChangesetComment[]> SearchChangesetComments(long? userId = null, string userName = null, DateTime? fromDate = null, DateTime? toDate = null, int? limit = null);
+        /// <summary>
         /// Get GPS Points
         /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Get_GPS_Points:_Get_.2Fapi.2F0.6.2Ftrackpoints.3Fbbox.3Dleft.2Cbottom.2Cright.2Ctop.26page.3DpageNumber">
         /// Get /api/0.6/trackpoints?bbox=left,bottom,right,top&page=pageNumber</see>.
@@ -192,8 +209,8 @@ namespace OsmSharp.IO.API
         Task<Stream> GetTrackPoints(Bounds bounds, int pageNumber = 0);
         /// <summary>
         /// Download Metadata
-        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Download_Metadata:_GET_.2Fapi.2F0.6.2Fgpx.2F.23id.2Fdetails">
-        /// GET /api/0.6/gpx/#id/details</see>.
+        /// <see href="https://wiki.openstreetmap.org/wiki/API_v0.6#Download_Metadata:_GET_/api/0.6/gpx/#id">
+        /// GET /api/0.6/gpx/#id</see>.
         /// </summary>
         Task<GpxFile> GetTraceDetails(long id);
         /// <summary>
