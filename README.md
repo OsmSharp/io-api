@@ -9,7 +9,7 @@ Pull requests are welcome. You will need VisualStudio, VS Code or Rider to modif
 ### Features
 - Supports Logging using ILogger
 - Supports Authentication with OAuth 2
-- Supports every documented operation of the Osm Api v0.6 (May be missing features after 2022, see [docs](https://www.nuget.org/packages/OsmSharp.IO.API/))
+- Supports every documented operation of the Osm Api v0.6 (as of September 2026)
 - Is thread safe
 
 ## Example Usage
@@ -60,6 +60,7 @@ See the [functional tests](https://github.com/blackboxlogic/OsmApiClient/tree/ma
 - :new_moon: Add comments to a changeset
 - :new_moon: Subscribe to a changeset
 - :new_moon: UnSubscribe to a changeset
+- :full_moon: Search changeset comments
 ### Map Elements
 - :full_moon: Get an element
 - :full_moon: Get an element's version history
@@ -98,6 +99,11 @@ See the [functional tests](https://github.com/blackboxlogic/OsmApiClient/tree/ma
 - :new_moon: Comment on a note
 - :new_moon: Close a note
 - :new_moon: ReOpen a note
+- :new_moon: Subscribe to a note
+- :new_moon: UnSubscribe to a note
+### User Blocks
+- :full_moon: Get a user block
+- :new_moon: Get current user's active blocks
 
 ## Contribute
 Issues and pull requests are welcome.

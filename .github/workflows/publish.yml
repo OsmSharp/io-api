@@ -6,10 +6,14 @@ on:
 jobs:
   build-test-publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v7
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: 10.0.x
     - name: Run Unit Test
       run: dotnet test
     - name: Build Solution
@@ -17,4 +21,10 @@ jobs:
     - name: Nuget Publish
       if: success()
       run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_SECRET}} ./OsmSharp.IO.API/bin/Release/*.nupkg
-
+    - name: Create GitHub Release
+      if: success()
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        VERSION=$(dotnet msbuild ./OsmSharp.IO.API/OsmSharp.IO.API.csproj -getProperty:Version)
+        gh release create "v$VERSION" --target "$GITHUB_SHA" --title "v$VERSION" --generate-notes
