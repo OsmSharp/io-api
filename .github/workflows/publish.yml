@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
     steps:
     - uses: actions/checkout@v7
     - name: Setup .NET Core
@@ -18,9 +19,14 @@ jobs:
       run: dotnet test
     - name: Build Solution
       run: dotnet build --configuration Release
+    - name: NuGet login (OIDC trusted publishing)
+      uses: NuGet/login@v1
+      id: nuget-login
+      with:
+        user: xivk
     - name: Nuget Publish
       if: success()
-      run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_SECRET}} ./OsmSharp.IO.API/bin/Release/*.nupkg
+      run: dotnet nuget push --source https://api.nuget.org/v3/index.json --api-key ${{ steps.nuget-login.outputs.NUGET_API_KEY }} ./OsmSharp.IO.API/bin/Release/*.nupkg
     - name: Create GitHub Release
       if: success()
       env:
